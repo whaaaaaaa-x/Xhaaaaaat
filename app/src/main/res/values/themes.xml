@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GenshinWishTracker" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorBackground">@color/dark_bg</item>
+        <item name="android:colorForeground">@color/white</item>
+        <item name="android:colorPrimary">@color/genshin_blue</item>
+        <item name="android:colorAccent">@color/genshin_gold</item>
+    </style>
+</resources>
