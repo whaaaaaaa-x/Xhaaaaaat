@@ -1,0 +1,2 @@
+-keep class com.genshin.wishtacker.** { *; }
+-keepclassmembers class com.genshin.wishtacker.** { *; }
