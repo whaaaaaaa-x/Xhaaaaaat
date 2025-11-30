@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Genshin Wish Tracker</string>
+    <string name="banner_type_event">Événement</string>
+    <string name="banner_type_chronicle">Chroniques</string>
+    <string name="banner_type_permanent">Permanente</string>
+    <string name="banner_type_weapon">Armes</string>
+    <string name="add_5_star">Ajouter un 5★</string>
+    <string name="stats">Statistiques</string>
+    <string name="export">Exporter</string>
+    <string name="import_data">Importer</string>
+    <string name="total_wishes">Vœux totaux</string>
+    <string name="total_5_star">Total 5★</string>
+    <string name="primogems_spent">Primogems dépensés</string>
+    <string name="win_rate">% Victoire</string>
+    <string name="lose_rate">% Défaite</string>
+    <string name="pity">Pity</string>
+    <string name="avg_pity">Pity moyen</string>
+</resources>
