@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshin Wish Tracker - Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f1419; color: #fff; }
+        
+        .phone { 
+            max-width: 390px; margin: 20px auto; background: #0f1419; 
+            border: 15px solid #333; border-radius: 40px; overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); height: 844px; display: flex; flex-direction: column;
+        }
+        .status-bar { background: #000; padding: 8px 0; text-align: center; font-size: 11px; }
+        .screen { flex: 1; overflow-y: auto; background: #0f1419; padding: 16px; }
+        
+        .header { 
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-title { 
+            font-size: 22px; font-weight: bold; color: #d4a66e;
+        }
+        .header-buttons { display: flex; gap: 8px; }
+        .icon-btn { 
+            background: none; border: none; color: #d4a66e; font-size: 20px; 
+            cursor: pointer; padding: 8px;
+        }
+        
+        .label { font-size: 12px; font-weight: bold; color: #1a4d7f; margin-bottom: 8px; }
+        
+        .banner-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 24px;
+        }
+        .banner-btn {
+            padding: 10px; text-align: center; border: none; border-radius: 6px;
+            background: #1a4d7f; color: #d4a66e; cursor: pointer; font-weight: bold;
+            font-size: 14px; transition: all 0.3s;
+        }
+        .banner-btn.active { background: #d4a66e; color: #0f1419; }
+        .banner-btn:hover { transform: scale(1.05); }
+        
+        .input-field {
+            margin-bottom: 12px;
+        }
+        .input-field input {
+            width: 100%; padding: 12px; background: #1a4d7f; color: #fff;
+            border: 1px solid #d4a66e; border-radius: 6px; font-size: 14px;
+        }
+        .input-field input::placeholder { color: #888; }
+        
+        .calc-box {
+            background: #1a2332; padding: 16px; border-radius: 8px;
+            border-left: 4px solid #d4a66e; margin-bottom: 20px;
+        }
+        .calc-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; font-size: 12px;
+        }
+        .calc-label { color: #1a4d7f; }
+        .calc-value { font-weight: bold; color: #d4a66e; font-size: 14px; }
+        
+        .progress-bar {
+            background: #1a4d7f; height: 8px; border-radius: 4px; margin-top: 12px; overflow: hidden;
+        }
+        .progress-fill { background: #d4a66e; height: 100%; transition: width 0.3s; }
+        
+        .button-row {
+            display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 20px;
+        }
+        .action-btn {
+            padding: 12px; text-align: center; border: none; border-radius: 6px;
+            color: #fff; cursor: pointer; font-weight: bold; font-size: 12px;
+            transition: all 0.3s;
+        }
+        .action-btn.primary { background: #1a4d7f; }
+        .action-btn.secondary { background: #7d3c8f; }
+        .action-btn:hover { transform: translateY(-2px); }
+        
+        .section-title {
+            font-size: 14px; font-weight: bold; color: #d4a66e; margin: 12px 0 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div class="status-bar">🔋 100%</div>
+        <div class="screen">
+            <!-- En-tête -->
+            <div class="header">
+                <div class="header-title">💎 Calculatrice Pity</div>
+                <div class="header-buttons">
+                    <button class="icon-btn" title="Historique">📋</button>
+                    <button class="icon-btn" title="Paramètres">⚙️</button>
+                </div>
+            </div>
+
+            <!-- Sélecteur Bannière -->
+            <div>
+                <div class="label">Bannière</div>
+                <div class="banner-row">
+                    <button class="banner-btn active" onclick="selectBanner(0)">⭐ Événement</button>
+                    <button class="banner-btn" onclick="selectBanner(1)">🔁 Chroniques</button>
+                    <button class="banner-btn" onclick="selectBanner(2)">♾️ Permanente</button>
+                    <button class="banner-btn" onclick="selectBanner(3)">⚔️ Armes</button>
+                </div>
+            </div>
+
+            <!-- Saisie -->
+            <div>
+                <div class="section-title">Saisie</div>
+                <div class="input-field">
+                    <input type="number" id="primogems" placeholder="💰 Primogems actuels" value="0" oninput="updateCalc()">
+                </div>
+                <div class="input-field">
+                    <input type="number" id="wishes" placeholder="🎁 Vœux effectués" value="0" oninput="updateCalc()">
+                </div>
+                <div class="input-field">
+                    <input type="number" id="pity" placeholder="🎯 Pity actuel (0-89)" value="0" min="0" max="89" oninput="updateCalc()">
+                </div>
+            </div>
+
+            <!-- Calculs -->
+            <div>
+                <div class="section-title">📊 Calculs</div>
+                <div class="calc-box">
+                    <div class="calc-row">
+                        <span class="calc-label">Pity actuel</span>
+                        <span class="calc-value"><span id="pityDisplay">0</span> / 75</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Vœux avant soft pity</span>
+                        <span class="calc-value"><span id="wishesRemaining">75</span> vœux</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Primogems nécessaires</span>
+                        <span class="calc-value"><span id="primoNeeded">12000</span> 💎</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons Actions -->
+            <div class="button-row">
+                <button class="action-btn primary">📋 Historique des Tirages</button>
+                <button class="action-btn secondary">📊 Statistiques Détaillées</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentBanner = 0;
+
+        function selectBanner(index) {
+            currentBanner = index;
+            const buttons = document.querySelectorAll('.banner-btn');
+            buttons.forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+        }
+
+        function updateCalc() {
+            const primogems = parseInt(document.getElementById('primogems').value) || 0;
+            const wishes = parseInt(document.getElementById('wishes').value) || 0;
+            const pity = parseInt(document.getElementById('pity').value) || 0;
+
+            // Vœux avant soft pity (75 - pity)
+            const wishesRemaining = Math.max(0, 75 - pity);
+            // Primogems nécessaires (vœux × 160)
+            const primoNeeded = wishesRemaining * 160;
+            // Progression du pity
+            const progress = Math.min((pity / 75) * 100, 100);
+
+            // Mise à jour du DOM
+            document.getElementById('pityDisplay').textContent = pity;
+            document.getElementById('wishesRemaining').textContent = wishesRemaining;
+            document.getElementById('primoNeeded').textContent = primoNeeded.toLocaleString('fr-FR');
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Initialisation
+        updateCalc();
+    </script>
+</body>
+</html>
