@@ -1,0 +1,14 @@
+{
+  "name": "genshin-wish-tracker-web",
+  "version": "1.0.0",
+  "description": "Web server for Genshin Wish Tracker documentation and APK download",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["genshin", "wish", "tracker"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
